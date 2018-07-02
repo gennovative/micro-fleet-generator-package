@@ -1,0 +1,31 @@
+{
+	"name": "<%- packageName %>",
+	"version": "1.0.0",
+	"description": "<%- description %>",
+	"scripts": {
+		"build": "npm run compile<%- needTest ? ' && npm run test' : '' %>",
+		"clean": "rimraf dist coverage .nyc_output",
+		"definition": "node ../../scripts/definition.js",
+		"dedup": "rimraf node_modules/**/node_modules/**/typings",
+		"compile": "npm run clean && npm run tslint && tsc --pretty",
+		"release": "npm run build && npm run definition",
+		<%_ if(needTest) { _%>
+		"test": "nyc --reporter=json --reporter=html --include dist/app/**/*.js mocha --recursive dist/test",
+		<%_ } _%>
+		"tslint": "tslint -c tslint.json 'src/**/*.ts'",
+		"watch": "npm run clean && npm run tslint && tsc --watch --pretty"
+	},
+	"keywords": [
+		"micro-fleet"
+	],
+	"author": {
+		"name": "gennovative",
+		"url": "https://github.com/gennovative"
+	},
+	"engines": {
+		"node": "^8"
+	},
+	"license": "MIT",
+	"private": false,
+	"repository": "<%-repository %>"
+}

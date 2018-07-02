@@ -1,0 +1,16 @@
+{
+	"extends": "../../tsconfig.base",
+	"include": [
+		"generators-src",
+		"typings"
+	],
+	"exclude": [
+		"typings/app.d.ts",
+		"node_modules",
+		"bower_components"
+	],
+	"compilerOptions": {
+		"rootDir": "generators-src",
+		"outDir": "generators"
+	}
+}

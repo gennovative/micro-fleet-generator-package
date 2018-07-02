@@ -1,0 +1,40 @@
+{
+	"name": "generator-package",
+	"version": "1.0.0",
+	"description": "A generator to create new package in micro-fleet mono repo.",
+	"scripts": {
+		"build": "npm run compile",
+		"clean": "rimraf dist coverage .nyc_output",
+		"definition": "node ../../scripts/definition.js",
+		"dedup": "rimraf node_modules/**/node_modules/**/typings",
+		"compile": "npm run clean && npm run tslint && tsc --pretty",
+		"release": "npm run build && npm run definition",
+		"tslint": "tslint -c tslint.json 'src/**/*.ts'",
+		"watch": "npm run clean && npm run tslint && tsc --watch --pretty"
+	},
+	"dependencies": {
+		"chalk": "~2.4",
+		"fs-extra": "~6.0",
+		"yeoman-generator": "~2.0"
+	},
+	"devDependencies": {
+		"@types/chalk": "~2.2",
+		"@types/fs-extra": "~4.0",
+		"@types/yeoman-generator": "~2.0",
+		"yo": "^2.0.2"
+	},
+	"keywords": [
+		"yeoman-generator",
+		"micro-fleet"
+	],
+	"author": {
+		"name": "gennovative",
+		"url": "https://github.com/gennovative"
+	},
+	"engines": {
+		"node": "^8"
+	},
+	"license": "MIT",
+	"private": false,
+	"repository": "git@github.com/gennovative/micro-fleet-generator-package.git"
+}
