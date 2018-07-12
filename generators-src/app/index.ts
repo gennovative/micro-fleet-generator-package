@@ -25,15 +25,7 @@ module.exports = class extends Generator {
 	 * @see http://yeoman.io/authoring/running-context.html
 	 */
 	protected async initializing(): Promise<any> {
-		this.argument('packageName', {
-			description: 'Package name which is used to name the folder and put in package.json.',
-			type: String,
-			required: true,
-		});
-
-		this._vars = {
-			packageName: this.options['packageName']
-		};
+		this._vars = {};
 	}
 
 	/**
@@ -41,6 +33,11 @@ module.exports = class extends Generator {
 	 */
 	protected async prompting() {
 		const answers = await this.prompt([
+			{
+				type: 'input',
+				name: 'packageName',
+				message: 'Package name (for folder name and package.json)',
+			},
 			{
 				type: 'input',
 				name: 'description',
@@ -59,35 +56,32 @@ module.exports = class extends Generator {
 		]);
 		this._vars = Object.assign(this._vars, answers);
 
-		const repo = answers['repository'] as string;
-		if (repo.startsWith('https://') || repo.startsWith('http://')) {
-			await this.prompt([
-				{
-					type: 'input',
-					name: 'repoUser',
+		// const repo = answers['repository'] as string;
+		// if (repo.startsWith('https://') || repo.startsWith('http://')) {
+		// 	await this.prompt([
+		// 		{
+		// 			type: 'input',
+		// 			name: 'repoUser',
 					
-					message: 'Code repository URL',
-				},
-			]);
-		}
+		// 			message: 'Code repository URL',
+		// 		},
+		// 	]);
+		// }
 	}
 
 	/**
 	 * Yeoman priority
 	 */
 	protected async writing() {
-		const opts: any = this.options;
+		const opts: any = this._vars;
 		const tplRoot: string = path.resolve(this.templatePath(), '../../../templates/app');
-		log.info('Template path: ' + tplRoot);
 		const destRoot = path.join(this.destinationRoot(), 'packages', opts.packageName);
-		log.info('Destination path: ' + destRoot);
 
-		await this.tryCloneRepo(this._vars['repoUrl'], destRoot);
+		await this._tryCloneRepo(this._vars['repoUrl'], destRoot);
 
+		log.info('Loading templates from: ' + tplRoot);
 		const files: string[] = await fsx.readdir(tplRoot);
 
-		log.info('Creating package: ' + opts.packageName);
-		log.info('Arguments: ' + this._vars);
 		for (let f of files) {
 			log.info('Copying ' + f);
 			const from = path.join(tplRoot, f);
@@ -96,15 +90,17 @@ module.exports = class extends Generator {
 		}
 	}
 
-	private async tryCloneRepo(url: string, targetPath: string): Promise<void> {
+	private async _tryCloneRepo(url: string, targetPath: string): Promise<void> {
 		const gitDir = path.join(targetPath, '.git');
 		if (await fsx.pathExists(targetPath) && await fsx.pathExists(gitDir)) {
+			log.info(`A repo at ${targetPath} already exists! No need to clone!`);
 			return Promise.resolve();
 		}
-		return this.cloneRepo(url, targetPath);
+		return this._cloneRepo(url, targetPath);
 	}
-
-	private cloneRepo(url: string, targetPath: string): Promise<void> {
+	
+	private _cloneRepo(url: string, targetPath: string): Promise<void> {
+		log.info('Cloning repository to: ' + targetPath);
 		return new Promise((resolve) => {
 			gitClone(url, targetPath, (args: any) => {
 				log.info('Debug cloneRepo arguments');

@@ -1,5 +1,5 @@
 {
-	"name": "<%- packageName %>",
+	"name": "@micro-fleet/<%- packageName %>",
 	"version": "1.0.0",
 	"description": "<%- description %>",
 	"scripts": {
@@ -27,5 +27,5 @@
 	},
 	"license": "MIT",
 	"private": false,
-	"repository": "<%-repository %>"
+	"repository": "<%-repoUrl %>"
 }

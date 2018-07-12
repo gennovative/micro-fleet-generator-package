@@ -1,11 +1,11 @@
 # Micro Fleet - <%= packageName %>
 
-<%- description %>
+Belongs to Micro Fleet framework. <%- description %>
 
 ## INSTALLATION
 
 - Stable version: `npm i @micro-fleet/<%- packageName %>`
-- Edge (development) version: `npm i <%- repository %>`
+- Edge (development) version: `npm i <%- repoUrl %>`
 
 ## DEVELOPMENT
 
